@@ -1,0 +1,80 @@
+import webbrowser
+import pandas as pd
+from alpha_vantage.timeseries import TimeSeries
+import time
+def link():
+        print("Do you want to see some of the top performing \nbonds : 1\nstocks:2\nfixed income:3")
+        i=input()
+        print("WAIT A SECOND...")
+        if(i=='1'):
+            webbrowser.open('https://www.etmoney.com/mutual-funds/debt/corporate-bond/61')
+        elif(i=='2'):
+            webbrowser.open('https://groww.in/markets/top-gainers?index=GIDXNIFTY100')
+        elif(i=='3'):
+            webbrowser.open('https://www.moneycontrol.com/fixed-income/best-fixed-income-rates/?classic=true')
+        print("Do you want to see any more information enter 'y' else 'n'")
+        if input()=='y':
+            link()
+        else:
+            print("THANK YOU FOR VISITING")
+def idea():
+    n=int(input("enter your salary"))
+    print("!!!NOTE THE BELOW SUGESSTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING AND WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING!!!")
+    p=int(n*.15)
+    s=input("Risk level you can take\n"
+            "if High then enter h\n"
+            "if Moderate risk enter m\n"
+            "if Low risk enter l").lower()
+    if s=='l':
+        print("inverst "+str(p*.2)+"in stocks")
+        print("inverst "+str(p*.6)+"in fixed income(like govermen t bonds,term deposit,fised deposit,gold soverign bonds)")
+        print("inverst "+str(p*.2)+"in mutual funds(comparitivly less risk in NIFTY50)")
+        print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
+
+    elif s=='m':
+        print("inverst " + str(p*.3) + "in stocks")
+        print("inverst " + str(p*.4) + "in fixed income(like goverment bonds,term deposit,fised deposit)")
+        print("inverst " + str(p*.3) + "in mutual funds(comparitivly less risk in NIFTY50)")
+        print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
+
+    elif s=='h':
+        print("inverst " + str(p*.3) + "in stocks")
+        print("inverst " + str(p*.1)  + "in US stocks")
+        print("inverst " + str(p*.2) + "in fixed income(like goverment bonds,term deposit,fised deposit)")
+        print("inverst " + str(p*.4) + "in mutual funds(comparitivly less risk in NIFTY50)")
+        print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
+    if input()=='y':
+        link()
+    else:
+        print("Start your investment TODAY!! DO NOT regret in future")
+def track():
+    api_key = '9B3RPQVRIOXMBDWP'
+    ts = TimeSeries(key=api_key, output_format='pandas')
+    sy=input("enter the stock Symbol to keep in track").upper()
+    amount=float(input("enter the amount you initially invested"))
+    no_of_stocks=float(input("enter the number of stocks you buyed"))
+    data, meta_data = ts.get_intraday(symbol=sy, interval='5min')
+    print(data)
+    print(data['4. close'][0])
+    c = float((data['4. close'][0]) - (data['1. open'][-1]))
+    h=float(max(data['2. high']))
+    l=float(min(data['3. low']))
+    print("Highest price of the day: ",h)
+    print("if you like to sell this stock then ")
+    profit_loss=float((data['4. close'][-1]-amount)*no_of_stocks)
+    if(profit_loss>0):
+        print("your profit will be",profit_loss)
+    else:
+        print("you are gonna loss",abs(profit_loss))
+    print("percentage difference",c)
+    if abs(c) > .2:
+        print("there is a jump")
+    else:
+        print("almost the same")
+print("STOCK TRACKING AND INVESTMENT IDEAS")
+c=input("do you want basic idea and suggestion then (enter idea)\n"
+        "if you want to keep in track with your own stocks(enter track)").lower().strip()
+if(c=='idea'):
+    idea()
+elif(c=='track'):
+    track()
