@@ -48,7 +48,7 @@ def idea():
     else:
         print("Start your investment TODAY!! DO NOT regret in future")
 def track():
-    api_key = '9B3RPQVRIOXMBDWP'
+    api_key = 'APIKEY'
     ts = TimeSeries(key=api_key, output_format='pandas')
     sy=input("enter the stock Symbol to keep in track").upper()
     amount=float(input("enter the amount you initially invested"))
