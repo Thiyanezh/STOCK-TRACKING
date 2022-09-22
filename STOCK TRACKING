@@ -78,3 +78,9 @@ if(c=='idea'):
     idea()
 elif(c=='track'):
     track()
+    print("if you want to contnue (enter y) if not (enter n)")
+    tr=input().lower().split()
+    if(tr=='y'):
+        track()
+    else:
+        print("THANK YOU")
