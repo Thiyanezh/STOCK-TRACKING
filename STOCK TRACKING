@@ -22,9 +22,9 @@ def idea():
     print("!!!NOTE THE BELOW SUGESSTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING AND WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING!!!")
     p=int(n*.15)
     s=input("Risk level you can take\n"
-            "if High then enter h\n"
-            "if Moderate risk enter m\n"
-            "if Low risk enter l").lower()
+            "if High then (enter h)\n"
+            "if Moderate risk (enter m)\n"
+            "if Low risk (enter l)").lower()
     if s=='l':
         print("inverst "+str(p*.2)+"in stocks")
         print("inverst "+str(p*.6)+"in fixed income(like govermen t bonds,term deposit,fised deposit,gold soverign bonds)")
@@ -48,9 +48,9 @@ def idea():
     else:
         print("Start your investment TODAY!! DO NOT regret in future")
 def track():
-    api_key = 'APIKEY'
+    api_key = '9B3RPQVRIOXMBDWP'
     ts = TimeSeries(key=api_key, output_format='pandas')
-    sy=input("enter the stock Symbol to keep in track").upper()
+    sy=input("enter the ticker to keep in track").upper()
     amount=float(input("enter the amount you initially invested"))
     no_of_stocks=float(input("enter the number of stocks you buyed"))
     data, meta_data = ts.get_intraday(symbol=sy, interval='5min')
@@ -71,16 +71,22 @@ def track():
         print("there is a jump")
     else:
         print("almost the same")
-print("STOCK TRACKING AND INVESTMENT IDEAS")
-c=input("do you want basic idea and suggestion then (enter idea)\n"
-        "if you want to keep in track with your own stocks(enter track)").lower().strip()
-if(c=='idea'):
-    idea()
-elif(c=='track'):
-    track()
-    print("if you want to contnue (enter y) if not (enter n)")
-    tr=input().lower().split()
-    if(tr=='y'):
+    tr = input("if you want to continue (enter y) if not (enter n)").lower().strip()
+    print(tr)
+    if tr == 'y':
         track()
     else:
-        print("THANK YOU")
+        print('THANK YOU')
+print("STOCK TRACKING AND INVESTMENT IDEAS")
+while True:
+    c=input("do you want basic idea and suggestion then (enter idea)\n"
+            "if you want to keep in track with your own stocks(enter track)").lower().strip()
+    if(c=='idea'):
+        idea()
+        break
+    elif(c=='track'):
+        track()
+        break
+    else:
+        print('invalid!!please enter a VALID INPUT')
+        continue
