@@ -50,23 +50,27 @@ def idea():
 def track():
     api_key = '9B3RPQVRIOXMBDWP'
     ts = TimeSeries(key=api_key, output_format='pandas')
-    sy=input("enter the ticker to keep in track").upper()
-    amount=float(input("enter the amount you initially invested"))
-    no_of_stocks=float(input("enter the number of stocks you buyed"))
-    data, meta_data = ts.get_intraday(symbol=sy, interval='5min')
+    sy=input("enter the ticker to keep in track ").upper()
+    amount=float(input("enter the amount you initially invested for buying one stock: "))
+    no_of_stocks=float(input("enter the number of stocks you buyed: "))
+    data,m_d= ts.get_intraday(symbol=sy, interval='5min')
     print(data)
+    print("Today's close price: ")
     print(data['4. close'][0])
-    c = float((data['4. close'][0]) - (data['1. open'][-1]))
+    #print("Today's last open price:")
+    #print(data['1. open'][-1])
+    c = float(((data['4. close'][0]) - (data['1. open'][-1]))/100)
     h=float(max(data['2. high']))
     l=float(min(data['3. low']))
     print("Highest price of the day: ",h)
+    print("Lowest price of the day: ",l)
     print("if you like to sell this stock then ")
-    profit_loss=float((data['4. close'][-1]-amount)*no_of_stocks)
+    profit_loss=float((data['4. close'][0]-amount)*no_of_stocks)
     if(profit_loss>0):
         print("your profit will be",profit_loss)
     else:
         print("you are gonna loss",abs(profit_loss))
-    print("percentage difference",c)
+    print("price difference",c)
     if abs(c) > .2:
         print("there is a jump")
     else:
