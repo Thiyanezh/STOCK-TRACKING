@@ -2,24 +2,31 @@ import webbrowser
 import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 import time
+import pyttsx3
+px=pyttsx3.init()
 def link():
         print("Do you want to see some of the top performing \nbonds : 1\nstocks:2\nfixed income:3")
         i=input()
-        print("WAIT A SECOND...")
+        px.say("WAIT A SECOND...")
+        px.runAndWait()
         if(i=='1'):
             webbrowser.open('https://www.etmoney.com/mutual-funds/debt/corporate-bond/61')
         elif(i=='2'):
             webbrowser.open('https://groww.in/markets/top-gainers?index=GIDXNIFTY100')
         elif(i=='3'):
             webbrowser.open('https://www.moneycontrol.com/fixed-income/best-fixed-income-rates/?classic=true')
+
         print("Do you want to see any more information enter 'y' else 'n'")
         if input()=='y':
             link()
         else:
-            print("THANK YOU FOR VISITING")
+            #print("THANK YOU")
+            menu()
 def idea():
     n=int(input("enter your salary"))
-    print("!!!NOTE THE BELOW SUGESSTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING AND WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING!!!")
+    px.say("NOTE THE BELOW SUGGESTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING OR WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING")
+    px.runAndWait()
+    print("!!!NOTE THE BELOW SUGESSTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING OR WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING!!!")
     p=int(n*.15)
     s=input("Risk level you can take\n"
             "if High then (enter h)\n"
@@ -43,10 +50,13 @@ def idea():
         print("inverst " + str(p*.2) + "in fixed income(like goverment bonds,term deposit,fised deposit)")
         print("inverst " + str(p*.4) + "in mutual funds(comparitivly less risk in NIFTY50)")
         print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
-    if input()=='y':
+    if input().lower().strip()=='y':
         link()
     else:
+        px.say("Start your investment TODAY. DO NOT regret in future")
+        px.runAndWait()
         print("Start your investment TODAY!! DO NOT regret in future")
+        menu()
 def track():
     api_key = '9B3RPQVRIOXMBDWP'
     ts = TimeSeries(key=api_key, output_format='pandas')
@@ -80,17 +90,31 @@ def track():
     if tr == 'y':
         track()
     else:
+        px.say("THANK YOU")
+        px.runAndWait()
         print('THANK YOU')
+def menu():
+    print("TO GET AN IDEA AND SUGGESTION ABOUT INVESTING (ENTER IDEA)")
+    print("TO TRACK YOUR OWN STOCKS (ENTER TRACK)")
+    print("TO EXIT (ENTER EXIT)")
 print("STOCK TRACKING AND INVESTMENT IDEAS")
-while True:
-    c=input("do you want basic idea and suggestion then (enter idea)\n"
-            "if you want to keep in track with your own stocks(enter track)").lower().strip()
-    if(c=='idea'):
+px.say("welcome")
+px.runAndWait()
+menu()
+option=input("enter your option :").lower().strip()
+while option!='exit':
+    if option =='idea':
         idea()
-        break
-    elif(c=='track'):
+    elif option =='track':
         track()
-        break
     else:
-        print('invalid!!please enter a VALID INPUT')
-        continue
+        px.say("invalid input")
+        px.runAndWait()
+        print("invalid!!! input ")
+
+    print()
+    menu()
+    option = input("enter your option :").lower().strip()
+px.say("THANK YOU")
+px.runAndWait()
+print("THANK YOU")
