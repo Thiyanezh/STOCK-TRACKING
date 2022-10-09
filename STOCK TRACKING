@@ -3,10 +3,15 @@ import pandas as pd
 from alpha_vantage.timeseries import TimeSeries
 import time
 import pyttsx3
+import openpyxl
+from openpyxl import Workbook, load_workbook
+import datetime
 px=pyttsx3.init()
+rate = px.getProperty("rate")
 def link():
-        print("Do you want to see some of the top performing \nbonds : 1\nstocks:2\nfixed income:3")
-        i=input()
+        print("Do you want to see some of the top performing \nbonds : 1\nstocks : 2\nfixed income : 3\nSmallcase : 4")
+        i=input().strip()
+        px.setProperty("rate",110)
         px.say("WAIT A SECOND...")
         px.runAndWait()
         if(i=='1'):
@@ -15,40 +20,49 @@ def link():
             webbrowser.open('https://groww.in/markets/top-gainers?index=GIDXNIFTY100')
         elif(i=='3'):
             webbrowser.open('https://www.moneycontrol.com/fixed-income/best-fixed-income-rates/?classic=true')
-
+        elif(i=='4'):
+            smallcase()
+        else:
+            print("invalid input!!")
         print("Do you want to see any more information enter 'y' else 'n'")
         if input()=='y':
             link()
+            time.sleep(5)
         else:
-            #print("THANK YOU")
-            menu()
+            print("DO YOU WANT TO GIVE SOME SUGGESTION (ENTER SUG)\n IF NOT PRESS (ENTER KEY)")
+            su = input().lower().strip()
+            if (su == 'sug'):
+                suggestion()
+            else:
+                #print("THANK YOU")
+                menu()
 def idea():
     n=int(input("enter your salary"))
-    px.say("NOTE THE BELOW SUGGESTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING OR WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING")
+    px.setProperty("rate", 140)
+    px.say("DISCLAIMER THE BELOW SUGGESTION ARE BASED ON SOME MATHEMATICAL MODEL FOR PROGRAMMING PURPOSE. WE ARE NOT INFLUENCING OR WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING")
     px.runAndWait()
-    print("!!!NOTE THE BELOW SUGESSTION ARE BASED ON SOME MATHEMATICAL MODEL WE ARE NOT INFLUENCING OR WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING!!!")
+    print("!!!DISCLAMIER THE BELOW SUGESSTION ARE BASED ON SOME MATHEMATICAL MODEL FOR PROGRAMMING PURPOSE. WE ARE NOT INFLUENCING OR WANT YOU TO INVEST. MAKE YOUR OWN RESEARCH BEFORE INVESTING!!!")
     p=int(n*.15)
     s=input("Risk level you can take\n"
             "if High then (enter h)\n"
             "if Moderate risk (enter m)\n"
             "if Low risk (enter l)").lower()
     if s=='l':
-        print("inverst "+str(p*.2)+"in stocks")
-        print("inverst "+str(p*.6)+"in fixed income(like govermen t bonds,term deposit,fised deposit,gold soverign bonds)")
-        print("inverst "+str(p*.2)+"in mutual funds(comparitivly less risk in NIFTY50)")
+        print("inverst "+str(p*.2)+" in stocks")
+        print("inverst "+str(p*.6)+" in fixed income(like govermen t bonds,term deposit,fised deposit,gold soverign bonds)")
+        print("inverst "+str(p*.2)+" in mutual funds(comparitivly less risk in NIFTY50)")
         print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
-
     elif s=='m':
-        print("inverst " + str(p*.3) + "in stocks")
-        print("inverst " + str(p*.4) + "in fixed income(like goverment bonds,term deposit,fised deposit)")
-        print("inverst " + str(p*.3) + "in mutual funds(comparitivly less risk in NIFTY50)")
+        print("inverst " + str(p*.3) + " in stocks")
+        print("inverst " + str(p*.4) + " in fixed income(like goverment bonds,term deposit,fised deposit)")
+        print("inverst " + str(p*.3) + " in mutual funds(comparitivly less risk in NIFTY50)")
         print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
 
     elif s=='h':
-        print("inverst " + str(p*.3) + "in stocks")
-        print("inverst " + str(p*.1)  + "in US stocks")
-        print("inverst " + str(p*.2) + "in fixed income(like goverment bonds,term deposit,fised deposit)")
-        print("inverst " + str(p*.4) + "in mutual funds(comparitivly less risk in NIFTY50)")
+        print("inverst " + str(p*.3) + " in stocks")
+        print("inverst " + str(p*.1) + " in US stocks")
+        print("inverst " + str(p*.2) + " in fixed income(like goverment bonds,term deposit,fised deposit)")
+        print("inverst " + str(p*.4) + " in mutual funds(comparitivly less risk in NIFTY50)")
         print("Do you want to see some of the top performing stocks ,bonds , mutual funds etc...\nif yes enter 'y'")
     if input().lower().strip()=='y':
         link()
@@ -57,11 +71,12 @@ def idea():
         px.runAndWait()
         print("Start your investment TODAY!! DO NOT regret in future")
         menu()
+
 def track():
     api_key = '9B3RPQVRIOXMBDWP'
     ts = TimeSeries(key=api_key, output_format='pandas')
-    sy=input("enter the ticker to keep in track ").upper()
-    amount=float(input("enter the amount you initially invested for buying one stock: "))
+    sy=input("enter the ticker to keep in track :").upper()
+    amount=float(input("enter the total amount you initially invested for buying the stock :"))
     no_of_stocks=float(input("enter the number of stocks you buyed: "))
     data,m_d= ts.get_intraday(symbol=sy, interval='5min')
     print(data)
@@ -75,12 +90,12 @@ def track():
     print("Highest price of the day: ",h)
     print("Lowest price of the day: ",l)
     print("if you like to sell this stock then ")
-    profit_loss=float((data['4. close'][0]-amount)*no_of_stocks)
+    profit_loss=float((data['4. close'][0]-(amount/no_of_stocks))*no_of_stocks)
     if(profit_loss>0):
-        print("your profit will be",profit_loss)
+        print("your profit will be :",profit_loss)
     else:
         print("you are gonna loss",abs(profit_loss))
-    print("price difference",c)
+    print("TODAY'S price difference is :",c)
     if abs(c) > .2:
         print("there is a jump")
     else:
@@ -90,13 +105,46 @@ def track():
     if tr == 'y':
         track()
     else:
-        px.say("THANK YOU")
-        px.runAndWait()
-        print('THANK YOU')
+        print("If you want to know about SMALLCASE then (enter y) if not (press enter)")
+        if (input().lower().strip() == 'y'):
+            smallcase()
+        print("DO YOU WANT TO GIVE SOME SUGGESTION (ENTER SUG) \n IF NOT PRESS (ENTER KEY)")
+        su=input().lower().strip()
+        if(su=='sug'):
+            suggestion()
+        else:
+            """px.say("THANK YOU")
+            px.runAndWait()
+            print('THANK YOU')"""
+def suggestion():
+    wb = load_workbook("C:/Users/Admin/Downloads/SUGGESTION.xlsx")
+    ws = wb.active
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    name = input("enter your name :")
+    sug = input("enter your valuable suggestion :")
+    ws.append([time, name, sug])
+    wb.save("C:/Users/Admin/Downloads/SUGGESTION.xlsx")
+    print("THANK YOU FOR SUBMITTING YOUR VALUABLE SUGGESTION")
+
 def menu():
     print("TO GET AN IDEA AND SUGGESTION ABOUT INVESTING (ENTER IDEA)")
     print("TO TRACK YOUR OWN STOCKS (ENTER TRACK)")
     print("TO EXIT (ENTER EXIT)")
+
+def smallcase():
+    print("Smallcases are a new way to invest in stocks. A smallcase is an intelligently weighted basket of upto 50 stocks that reflects a theme, idea or strategy.")
+    print("You can choose a smallcase based on a theme that you are positive on, invest in it in 3 clicks and track & manage multiple portfolios seamlessly.\n"
+          "Smallcases aren't a means of recommending or advising investors. Choosing a smallcase is upto each individual.")
+    print("Smallcase have features like RE-BALANCING meaning group of stock you added(i.e suggested based on a particular theme) in your account may be at risk or not performing well.\n"
+          "smallcase may ask you to sell some of the stocks to maintain a balance in your portfolio")
+    print("If you want to invest or want to vist Smallcase website for more details then (enter y) If not (press enter)")
+    if(input().lower().strip()=='y'):
+        px.setProperty("rate", 110)
+        px.say("WAIT A SECOND...")
+        px.runAndWait()
+        webbrowser.open("https://www.smallcase.com/")
+    else:
+        pass
 print("STOCK TRACKING AND INVESTMENT IDEAS")
 px.say("welcome")
 px.runAndWait()
@@ -111,7 +159,7 @@ while option!='exit':
         px.say("invalid input")
         px.runAndWait()
         print("invalid!!! input ")
-
+        
     print()
     menu()
     option = input("enter your option :").lower().strip()
